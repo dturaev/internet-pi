@@ -1,0 +1,1 @@
+- `ansible-playbook ./ansible-get-ip.yml` -- execute playbook

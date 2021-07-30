@@ -1,0 +1,2 @@
+- https://www.dennis-sareika.de/themen/informationstechnik/technik/50-pi-hole-adblock-via-docker-auf-dem-nas-synology-ds718 
+- https://discourse.pi-hole.net/t/dhcp-with-docker-compose-and-bridge-networking/17038

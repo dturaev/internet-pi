@@ -1,0 +1,43 @@
+---
+# Options:
+# http://manpages.ubuntu.com/manpages/focal/man8/dhcp-helper.8.html 
+# https://manpages.ubuntu.com/manpages/focal/man8/dhcrelay.8.html
+
+- name: Create dhcprelay folder on Pi.
+  ansible.builtin.file:
+    path: '{{ config_dir }}/dhcprelay'
+    state: directory
+    mode: 0755
+  become: false
+
+- name: Copy dhcprelay Dockerfile to Pi.
+  ansible.builtin.copy:
+    src: files/dhcprelay-Dockerfile
+    dest: '{{ config_dir }}/dhcprelay/Dockerfile'
+    mode: 0640
+  become: false
+
+- name: Get IP of pihole container
+  block:
+  - name: Get pihole container info
+    docker_container_info:
+      name: '{{ pihole_hostname }}'
+    register: result 
+  - name: Get pihole container IP
+    set_fact:
+      pihole_ip: '{{ result.container.NetworkSettings.Networks | json_query("*.IPAddress | [0]") }}'
+    when: result.exists
+
+- name: Copy dhcprelay docker-compose template to Pi.
+  ansible.builtin.template:
+    src: templates/dhcprelay-docker-compose.yml.j2
+    dest: '{{ config_dir }}/dhcprelay/docker-compose.yml'
+    mode: 0640
+  become: false
+  notify: Restart dhcprelay
+
+- name: Ensure dhcprelay is running.
+  community.docker.docker_compose:
+    project_src: '{{ config_dir }}/dhcprelay/'
+    build: true
+  become: false

@@ -1,0 +1,14 @@
+version: "3"
+
+# https://github.com/modem7/DHCP-Relay
+services:
+  dhcrelay-sh:
+    build: .
+    image: alpine/alpine:latest
+    restart: unless-stopped
+    network_mode: "host"
+    stdin_open: true
+    tty: true
+    #command:
+    cap_add:
+      - NET_ADMIN

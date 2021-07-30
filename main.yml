@@ -38,6 +38,10 @@
       ansible.builtin.import_tasks: tasks/pi-hole.yml
       when: pihole_enable
 
+    - name: Set up DHCP relay for using Pi-hole DHCP server.
+      ansible.builtin.import_tasks: tasks/dhcprelay.yml
+      when: dhcprelay_enable
+
     - name: Set up Shelly Plug Monitoring.
       ansible.builtin.import_tasks: tasks/shelly-plug.yml
       when: shelly_plug_enable

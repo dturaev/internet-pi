@@ -1,0 +1,19 @@
+# {{ ansible_managed}}
+---
+version: "3"
+
+services:
+  dhcprelay:
+    build: .
+    #image: modem7/dhcprelay:latest  # or use pre-defined image instead
+    container_name: dhcprelay
+    #hostname: dhcprelay
+    #command: ["-id", "eno1", "-iu", "br_pihole", "172.33.0.100"] #https://fedoramagazine.org/build-network-bridge-fedora/
+    #command: [ "172.31.0.100" ]
+    command: [ '{{ pihole_ip }}' ]
+    cap_add:
+      - NET_ADMIN
+    network_mode: "host"
+    restart: unless-stopped
+    mem_limit: 20m
+    mem_reservation: 5m

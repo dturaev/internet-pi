@@ -1,0 +1,44 @@
+version: "3"
+services:
+  pihole:
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    restart: unless-stopped
+    cap_add:
+        - NET_ADMIN
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    environment:
+      ServerIP: x.x.x.x
+      DNS1: 1.1.1.1
+      DNS2: 1.0.0.1
+      VIRTUAL_HOST: pi.hole
+      DNSMASQ_LISTENING: all
+    volumes:
+      - '/home/xxx/docker/pihole/pihole/:/etc/pihole/'
+      - '/home/xxx/docker/pihole/dnsmasq.d/:/etc/dnsmasq.d/'
+    depends_on:
+      - dhcphelper
+    networks:
+      backend:
+        ipv4_address: '172.31.0.100'
+      frontproxy_proxy-tier: {}
+
+  dhcphelper:
+    build: ./dhcp-helper
+    restart: unless-stopped
+    network_mode: "host"
+    command: -s 172.31.0.100
+    cap_add:
+      - NET_ADMIN
+
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: 172.31.0.0/16
+  frontproxy_proxy-tier:
+    external: true

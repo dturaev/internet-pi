@@ -1,0 +1,15 @@
+- https://www.baeldung.com/ops/docker-container-shell
+- get interactive shell with docker-compose: `docker-compose run --rm <container>`
+- additionally (or alternatively) add to docker-compose.yml:
+  - `stdin_open: true`
+  - `tty: true`
+- `docker exec -ti <container> sh` -- attach to running container (or `/bin/bash`)
+  - may need: `--service-ports`, `--cap-add=NET_ADMIN`, ...
+- `docker run -it --rm ubuntu:18.04` -- run container in interactive mode, remove upon exit
+- try: `docker-compose up -d && docker attach <container>`
+- workaround in case interactive mode doesn't work (because something is wrong):
+  - `docker run -d ubuntu:18.04 tail -f /dev/null` -- start container in detached/background mode, and execute a command that forces the container to run forever
+  - `docker exec -it <container> sh` -- attach to this container
+- `docker logs --tail 50 --follow --timestamps <container>` -- get logs from container run
+- `docker network ls` -- list all networks
+- `docker network inspect <network>` -- inspect a network

@@ -1,0 +1,10 @@
+version: "3"
+services:
+  dhcphelper:
+    build: .
+    restart: unless-stopped
+    network_mode: "host"
+    command: -s 172.31.0.100
+    cap_add:
+      - NET_ADMIN
+

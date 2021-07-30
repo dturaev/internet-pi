@@ -1,0 +1,53 @@
+---
+- hosts: internet_pi
+  
+  pre_tasks:
+  - name: Load configuration (with defaults from example file).
+    ansible.builtin.include_vars: "{{ item }}"
+    loop:
+    - ../example.config.yml
+    - ../config.yml
+
+  tasks:
+  - name: Get infos on container
+    docker_container_info:
+      name: "{{ pihole_hostname }}"  # "pihole"
+    register: result
+
+  - name: Does container exist?
+    debug:
+      msg: "The container {{ 'exists' if result.exists else 'does not exist' }}"
+
+  - name: Get container IP
+    set_fact:
+      pihole_ip: "{{ result.container.NetworkSettings.Networks | json_query('*.IPAddress') }}"
+      #var: result.container.NetworkSettings.Networks
+    when: result.exists
+
+  - name: Print container IP
+    debug:
+      msg: "{{ pihole_ip }}"
+
+  - name: Get infos on network
+    docker_network_info:
+      name: pi-hole_default
+    register: result
+
+  - name: Print information about network
+    debug:
+      var: result.network.Containers
+    when: result.exists
+
+  - name: Get container IP using `docker inspect`
+    # https://stackoverflow.com/a/20686101/9907994
+    shell: "docker inspect -f {% raw %} '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' {% endraw %} {{ pihole_hostname }}"
+    register: container_ip
+
+  - name: Print information from `docker inspect`
+    debug:
+      var: container_ip.stdout
+
+    #- name: get container ip
+    #ansible.builtin.debug:
+    #  var: result.container
+    #when: result.exists

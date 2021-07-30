@@ -1,0 +1,15 @@
+# {{ ansible_managed}}
+---
+version: "3"
+
+services:
+  dhcphelper:
+    build: .
+    #image: homeall/dhcphelper:latest  # or use pre-defined image (https://github.com/homeall/dhcphelper)
+    #container_name: dhcphelper
+    #command: -s '{{ ansible_facts['default_ipv4']['address'] }}'
+    command: -s 172.31.0.100
+    cap_add:
+      - NET_ADMIN
+    network_mode: "host"
+    restart: unless-stopped
