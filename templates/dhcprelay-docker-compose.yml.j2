@@ -10,6 +10,7 @@ services:
     #hostname: dhcprelay
     #command: ["-id", "eno1", "-iu", "br_pihole", "172.33.0.100"] #https://fedoramagazine.org/build-network-bridge-fedora/
     #command: [ "172.31.0.100" ]
+    #command: [ "192.168.0.115" ]  # lan IP (doesn't work, we need direct access to docker network)
     command: [ '{{ pihole_ip }}' ]
     cap_add:
       - NET_ADMIN

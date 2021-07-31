@@ -1,2 +1,10 @@
 - https://www.dennis-sareika.de/themen/informationstechnik/technik/50-pi-hole-adblock-via-docker-auf-dem-nas-synology-ds718 
 - https://discourse.pi-hole.net/t/dhcp-with-docker-compose-and-bridge-networking/17038
+- https://docs.pi-hole.net/docker/dhcp/
+- https://docs.pi-hole.net/main/prerequisites/
+- https://discourse.pi-hole.net/t/dhcp-not-working/25282
+- Discover DHCP servers, https://askubuntu.com/a/1085350/1026397
+  - `sudo pihole-FTL dhcp-discover` -- search for DHCP servers on all interfaces
+  - `sudo nmap --script broadcast-dhcp-discover` -- discover DHCP servers over broadcast
+  - `sudo nmap -sU -p 67 --script=dhcp-discover 192.168.0.115` --
+  - `dhcp_probe`
